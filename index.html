@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#081018" />
+  <title>AURA MIX — Web Player</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="library card">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">MUSIC LIBRARY</div>
+          <h2>AURA MIX</h2>
+        </div>
+        <div class="head-actions">
+          <button id="shuffle90Btn" class="ghost">🎲 1990–2000</button>
+          <button id="historyBtn" class="ghost">🕘 ประวัติ</button>
+        </div>
+      </div>
+
+      <div class="search-row">
+        <input id="searchInput" type="search" placeholder="ค้นหาเพลง / ศิลปิน..." autocomplete="off" />
+        <select id="searchMode">
+          <option value="all">YouTube ทั้งหมด</option>
+          <option value="official">Official / Audio</option>
+          <option value="mv">Official MV</option>
+          <option value="live">Live</option>
+          <option value="karaoke">Karaoke</option>
+        </select>
+        <button id="searchBtn" class="primary">ค้นหา</button>
+      </div>
+
+      <div class="panes">
+        <section class="pane">
+          <div class="pane-head">
+            <span>🔍 ผลการค้นหา</span>
+            <button id="artistBtn" class="ghost small">🎤 ศิลปิน</button>
+          </div>
+          <div id="searchList" class="track-list"></div>
+          <button id="addBtn" class="primary full">＋ เพิ่มเพลงที่เลือกลงคิว</button>
+        </section>
+
+        <section class="pane">
+          <div class="pane-head">
+            <span>🎵 คิวเพลง</span>
+            <div class="queue-actions">
+              <button id="removeBtn" class="ghost small">ลบ</button>
+              <button id="clearBtn" class="ghost small">ล้าง</button>
+            </div>
+          </div>
+          <div id="queueList" class="track-list queue-list"></div>
+        </section>
+      </div>
+
+      <div class="wave-title">MUSIC WAVEFORM • CLICK / DRAG TO SEEK</div>
+      <canvas id="waveform" height="132"></canvas>
+    </aside>
+
+    <main class="player card">
+      <div class="eyebrow center">AURA MIX ENGINE</div>
+      <div id="clock" class="clock">--:--:-- • --/--/----</div>
+
+      <div class="timeline-wrap">
+        <input id="progress" type="range" min="0" max="60" step="0.01" value="0" />
+        <div id="timeline" class="timeline">0:00 / 1:00</div>
+      </div>
+
+      <div class="cover-wrap">
+        <img id="cover" class="cover" alt="YouTube cover" />
+        <div id="coverFallback" class="cover-fallback">YouTube<br/>COVER</div>
+      </div>
+
+      <h1 id="nowTitle">พร้อมเล่น</h1>
+      <div id="meta" class="meta">—</div>
+
+      <div class="status-panel">
+        <div id="status" class="status ok">READY</div>
+        <div id="engineClock" class="engine-clock">AUTO MIX • READY</div>
+        <div id="nextLabel" class="next-label">เพลงต่อไป: —</div>
+        <div id="modeLabel" class="mode-label">AUTO • 60 วิ / เพลง | CROSSFADE 4 วิ | PRELOAD</div>
+      </div>
+
+      <div class="controls two">
+        <button id="mixBtn" class="primary toggle active">🤖 AUTO MIX • ON</button>
+        <button id="startBtn" class="primary">▶ เริ่มเพลงที่เลือก</button>
+      </div>
+      <div class="controls three">
+        <button id="prevBtn" class="ghost">⏮ ก่อนหน้า</button>
+        <button id="pauseBtn" class="ghost">⏸ พักเพลง</button>
+        <button id="nextBtn" class="ghost">⏭ ถัดไป</button>
+      </div>
+      <div class="controls one">
+        <button id="stopBtn" class="danger">⏹ หยุด</button>
+      </div>
+
+      <div class="settings-grid">
+        <label class="switch-row"><span>🎵 AUTO MUSIC</span><input id="autoMusic" type="checkbox" checked><span class="switch-ui"></span></label>
+        <label class="switch-row"><span>✨ AUTO EQ</span><input id="autoEQ" type="checkbox" checked><span class="switch-ui"></span></label>
+      </div>
+
+      <div class="eq-card">
+        <div class="eq-title">🎚 ปรับแต่งเสียง <span>เว็บจะควบคุมระดับการเล่น แต่ EQ ของ YouTube iframe มีข้อจำกัด</span></div>
+        <div class="eq-row"><label>🔊 Bass</label><input id="bass" type="range" min="-12" max="12" value="0"><output id="bassValue">0 dB</output></div>
+        <div class="eq-row"><label>🎵 Music</label><input id="music" type="range" min="-12" max="12" value="0"><output id="musicValue">0 dB</output></div>
+        <div class="eq-row"><label>🎤 Vocal</label><input id="vocal" type="range" min="-12" max="12" value="0"><output id="vocalValue">0 dB</output></div>
+      </div>
+
+      <div class="footer-note">AUTO MIX • ลื่น • 60 วินาที • CROSSFADE 4 วิ • PRELOAD • AUTO MUSIC</div>
+    </main>
+  </div>
+
+  <div id="historyModal" class="modal hidden">
+    <div class="modal-panel">
+      <div class="modal-head"><h3>ประวัติการฟัง</h3><button id="closeHistory" class="ghost">ปิด</button></div>
+      <div class="history-note">เพลงซ้ำจะเลื่อนขึ้นอันดับ 1</div>
+      <div id="historyList" class="history-list"></div>
+      <button id="clearHistory" class="danger full">🗑 ล้างประวัติ</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <div id="ytPlayers" class="yt-players" aria-hidden="true">
+    <div id="playerA"></div>
+    <div id="playerB"></div>
+  </div>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
