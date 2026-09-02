@@ -1,0 +1,31 @@
+AURA MIX — YouTube API SETUP
+============================
+
+1) Google Cloud Console
+   - Create/select a project.
+   - Enable: YouTube Data API v3
+   - Create an API Key.
+
+2) Netlify
+   Site dashboard -> Project configuration -> Environment variables
+   -> Add a variable
+
+   Key:
+   YOUTUBE_API_KEY
+
+   Value:
+   <วาง API Key จริงของ Google ตรงนี้>
+
+   IMPORTANT:
+   - Key name must be exactly YOUTUBE_API_KEY
+   - Do not type KEY: before it.
+   - Do not add quotes.
+   - Do not put the secret in index.html or app.js.
+   - Redeploy after changing the variable.
+
+3) AURA MIX API route
+   Browser -> /api/youtube-search -> Netlify Function -> YouTube Data API
+
+4) If search says:
+   YOUTUBE_API_KEY is not configured on Netlify
+   the environment variable is missing from Netlify or the site has not been redeployed.
