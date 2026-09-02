@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#060a10">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="AURA MIX — mobile music player">
+  <title>AURA MIX</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
+  <div id="app" class="app">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="logo-dot"><span></span></div>
+        <div><div class="brand">AURA MIX</div><div class="brand-sub">SMOOTH CROSSFADE PLAYER</div></div>
+      </div>
+      <div class="clock-wrap"><div class="engine">AURA MIX ENGINE</div><div id="realClock">--:--:-- • --/--/----</div></div>
+    </header>
+
+    <main class="main-shell">
+      <section class="hero-card" id="playerSection">
+        <div class="hero-top">
+          <div class="status-chip"><span id="statusDot"></span><span id="status">READY</span></div>
+          <button class="icon-btn" id="moreBtn" aria-label="เมนู">•••</button>
+        </div>
+        <div class="cover-orb"><div class="cover-glow"></div><img id="coverImg" alt="ปกเพลง"><div id="coverPlaceholder" class="cover-placeholder"><b>AURA</b><span>MUSIC</span></div></div>
+        <div id="nowTitle" class="now-title">พร้อมเล่น</div>
+        <div id="nowMeta" class="now-meta">—</div>
+        <div class="status-panel">
+          <div id="clockLabel" class="clock-label">AUTO MIX • READY</div>
+          <div id="nextText" class="next-text">เพลงต่อไป: —</div>
+          <div id="modeText" class="mode-text">AUTO • 60 วิ / เพลง • CROSSFADE 4 วิ • PRELOAD</div>
+        </div>
+        <div class="timeline" id="timeline">
+          <div class="timeline-track"><span id="progressBar"></span></div>
+          <div class="timeline-times"><span id="timeLabel">0:00 / 1:00</span><span id="mixBadge">MIX 4S</span></div>
+        </div>
+        <div class="wave-wrap"><canvas id="waveCanvas"></canvas><div class="wave-mark">MUSIC WAVEFORM • แตะ / ลากเพื่อเลื่อนตำแหน่ง</div></div>
+        <div class="transport">
+          <button class="transport-btn" id="prevBtn">⏮<small>ก่อนหน้า</small></button>
+          <button class="play-btn" id="playBtn">▶</button>
+          <button class="transport-btn" id="nextBtn">⏭<small>ถัดไป</small></button>
+        </div>
+        <div class="secondary-controls">
+          <button id="mixBtn" class="control-card active"><strong>🤖 AUTO MIX</strong><span>ON • 60s</span></button>
+          <button id="pauseBtn" class="control-card"><strong>⏸ พักเพลง</strong><span>PLAY / PAUSE</span></button>
+          <button id="stopBtn" class="control-card"><strong>⏹ หยุด</strong><span>STOP</span></button>
+          <button id="autoMusicBtn" class="control-card active"><strong>✨ AUTO MUSIC</strong><span>ON</span></button>
+        </div>
+        <div class="volume-row"><span>🔊</span><input id="vol" type="range" min="0" max="100" value="100" aria-label="ระดับเสียง"><b id="volVal">100%</b></div>
+      </section>
+
+      <section class="section-card" id="searchSection">
+        <div class="section-header"><div><div class="eyebrow">LIBRARY</div><h2>ค้นหาเพลง</h2></div><button id="artistBtn" class="soft-btn">🎤 ศิลปิน</button></div>
+        <div class="search-box"><input id="searchInput" inputmode="search" autocomplete="off" placeholder="ค้นหาเพลง / ศิลปิน..."><button id="searchBtn">ค้นหา</button></div>
+        <div class="filter-row"><select id="searchMode"><option>YouTube ทั้งหมด</option><option>Official / Audio</option><option>Official MV</option><option>Live</option><option>Karaoke</option></select><button id="oldBtn" class="soft-btn">🎲 1990–2000</button></div>
+        <div id="searchList" class="music-list"><div class="empty-state">พิมพ์ชื่อเพลงหรือศิลปินแล้วกดค้นหา</div></div>
+      </section>
+
+      <section class="section-card" id="queueSection">
+        <div class="section-header"><div><div class="eyebrow">PLAYLIST</div><h2>คิวเพลง <span id="queueCount" class="count-pill">0</span></h2></div><div class="header-actions"><button id="removeBtn" class="soft-btn">ลบ</button><button id="clearBtn" class="soft-btn">ล้าง</button></div></div>
+        <div id="queueList" class="music-list"><div class="empty-state">ยังไม่มีเพลงในคิว</div></div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" aria-label="เมนูหลัก">
+    <button data-target="searchSection" class="nav-item active"><span>⌕</span><small>ค้นหา</small></button>
+    <button data-target="queueSection" class="nav-item"><span>♫</span><small>คิว</small></button>
+    <button data-target="playerSection" class="nav-item"><span>▶</span><small>เล่น</small></button>
+    <button id="navMenuBtn" class="nav-item"><span>☰</span><small>เมนู</small></button>
+  </nav>
+
+  <div id="modal" class="modal" aria-hidden="true"><div class="sheet" role="dialog" aria-modal="true"><div class="sheet-head"><div id="modalTitle">เมนู</div><button id="closeModal" class="icon-btn">✕</button></div><div id="modalBody"></div></div></div>
+  <div id="toast" class="toast"></div>
+  <div class="yt-host" aria-hidden="true"><div id="yt-a"></div><div id="yt-b"></div></div>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="youtube-search.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
