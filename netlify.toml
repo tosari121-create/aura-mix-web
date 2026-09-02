@@ -1,9 +1,0 @@
-[build]
-  publish = "."
-  functions = "netlify/functions"
-
-[[redirects]]
-  from = "/api/youtube-search"
-  to = "/.netlify/functions/youtube-search"
-  status = 200
-  force = true
